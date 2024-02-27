@@ -109,3 +109,12 @@ let y = 10;
 
 println("x is {x} and y + 2 is ", y + 2);
 ```
+
+**[dependencies] and crates**
+These are all declared in `Cargo.toml` and they follow semantic versioning. If you type something like `0.8.15` it actually means `^0.8.15` so the current version and above
+After you add dependency, run `cargo build`
+All the crates live in `crates.io`
+
+**shadowing**
+When we do `let mut guess` and then after `let guess` we are using a feature of Rust called shadowing.
+It basically lets you use the same variable name without it being _illegal_ and it's a technique often used for type conversion scenarios.
