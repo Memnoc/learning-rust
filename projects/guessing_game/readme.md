@@ -100,6 +100,17 @@ let x: Result<i32, &str> = Err("Some error message");
 assert_eq!(x.is_ok(), false);
 ```
 
+In the guessing game program, we have implemented it as such:
+
+```rust
+ let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+```
+
+When a non-number is entered, the parse method fails to convert the string into a number, and error is returned, however that `continue` statement makes so that the program does not crash and proposes the guesses again.When successful, the statement returns the converted string into number as intended.
+
 The `{}` crab pinchers (placeholders)
 These are placeholders for values and experessions. When they are for values they containt the variable and when they are expressions they are empty:
 
