@@ -2,9 +2,30 @@
 // temp = (temp * 9 / 5) + 32; for Celsius
 // temp = ((temp - 32) * 5) / 9; for Farenheit
 
-// use std::io;
-
 use std::io;
+
+fn read_temperature(prompt: &str) -> f32 {
+    println!("{prompt}");
+    let mut temp_str = String::new();
+    io::stdin()
+        .read_line(&mut temp_str)
+        .expect("Failed to read line");
+    match temp_str.trim().parse() {
+        Ok(num) => num,
+        Err(_) => {
+            println!("Please enter a valid number");
+            0.0
+        }
+    }
+}
+
+fn convert_temperature(temp: f32, unit: &str) -> f32 {
+    match unit {
+        "C" => (temp * 9.0 / 5.0) + 32.0,
+        "F" => (temp - 32.0) * 5.0 / 9.0,
+        _ => 0.0, // invalid unit
+    }
+}
 
 fn main() {
     println!("****** Temperature Converter ******");
@@ -15,31 +36,21 @@ fn main() {
         .read_line(&mut unit)
         .expect("Failed to read line");
 
-    let unit = unit.trim();
+    let unit = unit.trim().to_uppercase(); // allows for lower case input
 
-    println!("The value of unit is {unit}");
-
-    if unit == "C" {
-        println!("Please enter the temp in C");
-        let mut temp: String = String::new();
-
-        io::stdin()
-            .read_line(&mut temp)
-            .expect("Failed to read line");
-
-        let mut temp: u32 = temp.trim().parse().unwrap_or(1);
-        temp = (temp * 9 / 5) + 32;
-        println!("The temperature in Celsius is {temp}");
-    } else if unit == "F" {
-        println!("Please enter the temp in F");
-        let mut temp: String = String::new();
-
-        io::stdin()
-            .read_line(&mut temp)
-            .expect("Failed to read line");
-
-        let mut temp: u32 = temp.trim().parse().unwrap_or(1);
-        temp = ((temp - 32) * 5) / 9;
-        println!("The temperature in Celsius is {temp}");
+    match unit.as_str() {
+        "C" => {
+            let temp = read_temperature("Please enter the temperature in C: ");
+            let converted = convert_temperature(temp, "C");
+            println!("The temperature in Farenheit is {converted}");
+        }
+        "F" => {
+            let temp = read_temperature("Please enter the temperature in F: ");
+            let converted = convert_temperature(temp, "F");
+            println!("The temperature in Celsius is {converted}");
+        }
+        _ => {
+            println!("Please enter a valid unit (C or F)")
+        }
     }
 }
