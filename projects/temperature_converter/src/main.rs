@@ -14,7 +14,7 @@ fn read_temperature(prompt: &str) -> f32 {
         Ok(num) => num,
         Err(_) => {
             println!("Please enter a valid number");
-            0.0
+            panic!()
         }
     }
 }
