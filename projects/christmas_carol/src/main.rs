@@ -1,4 +1,38 @@
-fn days(day: u32) -> &'static str {
+enum Gift {
+    Partridge,
+    TurtleDoves,
+    FrenchHens,
+    CallingBirds,
+    GoldenRings,
+    GeeseALaying,
+    SwansASwimming,
+    MaidsAMilking,
+    LadiesDancing,
+    LordsALeaping,
+    PipersPiping,
+    DrummersDrumming,
+}
+
+impl Gift {
+    fn verses(&self) -> &'static str {
+        match self {
+            Gift::Partridge => "a Partridge in a Pear Tree",
+            Gift::TurtleDoves => "two Turtle Doves, and",
+            Gift::FrenchHens => "three French Hens,",
+            Gift::CallingBirds => "four Calling Birds,",
+            Gift::GoldenRings => "five Golden Rings,",
+            Gift::GeeseALaying => "six Geese a Laying,",
+            Gift::SwansASwimming => "seven Swans a Swimming,",
+            Gift::MaidsAMilking => "eight Maids a Milking,",
+            Gift::LadiesDancing => "nine Ladies Dancing,",
+            Gift::LordsALeaping => "ten Lords a Leaping,",
+            Gift::PipersPiping => "eleven Pipers Piping,",
+            Gift::DrummersDrumming => "twelve Drummers Drumming,",
+        }
+    }
+}
+
+fn days(day: usize) -> &'static str {
     match day {
         1 => "first",
         2 => "second",
@@ -15,33 +49,31 @@ fn days(day: u32) -> &'static str {
         _ => unreachable!(),
     }
 }
+fn main() {
+    println!("***** Christmas carol ******");
+    let gifts = [
+        Gift::Partridge,
+        Gift::TurtleDoves,
+        Gift::FrenchHens,
+        Gift::CallingBirds,
+        Gift::GoldenRings,
+        Gift::GeeseALaying,
+        Gift::SwansASwimming,
+        Gift::MaidsAMilking,
+        Gift::LadiesDancing,
+        Gift::LordsALeaping,
+        Gift::PipersPiping,
+        Gift::DrummersDrumming,
+    ];
 
-fn verses() {
     for day in 1..=12 {
         println!(
-            "On the {} day of Christmas, my true love sent to me:",
+            "On the {} day of Christmas my true love sent to me:",
             days(day)
         );
-        match day {
-            12 => println!("Twelves Drummers Drumming"),
-            11 => println!("Eleven Pipers Piping"),
-            10 => println!("Ten Lords a Leaping"),
-            9 => println!("Nine Ladies Dancing"),
-            8 => println!("Eight Maids a Milking"),
-            7 => println!("Seven Swans a Swimming"),
-            6 => println!("Six Geese a Laying"),
-            5 => println!("Five Golden Rings"),
-            4 => println!("Four Calling Birds"),
-            3 => println!("Three French Hens"),
-            2 => println!("Two Turtle Doves, and"),
-            1 => println!("A Partridge in a Pear Tree"),
-            _ => unreachable!(),
+        for gift in (0..day).rev() {
+            println!("{}", gifts[gift].verses());
         }
         println!();
     }
-}
-
-fn main() {
-    println!("***** Christmas carol ******");
-    verses();
 }
