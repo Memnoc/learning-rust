@@ -42,10 +42,10 @@ fn days(day: usize) -> &'static str {
         6 => "sixth",
         7 => "seventh",
         8 => "eight",
-        9 => "nineth",
+        9 => "ninth",
         10 => "tenth",
         11 => "eleventh",
-        12 => "twelveth",
+        12 => "twelfth",
         _ => unreachable!(),
     }
 }
