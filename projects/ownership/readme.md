@@ -57,4 +57,36 @@ When we do `String::from` we are asking for the memory. In Rust, we do not have 
 }                               // no longer valid, memory returned
 ```
 
-There is a natural point in which we can return the memory, and Rust makes use of that under the hood calling a `drop` function automatically at the closing curly bracket
+There is a natural point in which we can return the memory, and Rust makes use of that under the hood calling a `drop` function automatically at the closing curly bracket.
+
+This practically means that Rust invalidates variables that are out of scope, keeping effectively the memory free. It does so by copying the old data from the stack to a new stack, pointing to the same pointer in the heap. So the heap data in this case **is not copied.**
+This seems similar to the concept of _shallow copy_ of other programming language. This also means that **Rust will never automatically create "deep" copies of the data. Any _automatic_ copying is inexpensive in terms of runtime performance.**
+
+**Clone and deep copies**
+If we want to deeply copy the heap data of the `String`, not just the stack data, we can use a common method called `clone`. When you see `clone` you know that some special code is being executed and may be expensive.
+
+**Stack-Only Data: Copy**
+As said, some types do not need `clone` because they are stored entirely on the stack. In other words, there is not difference between shallow and deep copy.
+
+```rust
+let x = 5;
+let y = x;
+
+println!("x = {}, y = {}", x, y);
+```
+
+Under the cover, Rust uses a special annotation called the `Copy` the trait, and uses that on traits that are stored exclusively on the stack. Types that use `Copy` do not move, rather, are shallowed copied which makes them still valid after assignment to another variable.
+
+Rust does not let you annotate a type with `Copy` if the type, or any of its parts, has implemented the `Drop` trait.
+
+Generally speaking, any of the simple scalar values can implement `Copy`, and nothing that requires allocation or is some of resource can implement `Copy`.
+
+Types tha implement `Copy`:
+
+- All the integer types, such as u32.
+- The Boolean type, bool, with values true and false.
+- All the floating-point types, such as f64.
+- The character type, char.
+- Tuples, if they only contain types that also implement Copy. For example, (i32, i32) implements Copy, but (i32, String) does not.
+
+**Ownership and Functions**
