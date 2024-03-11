@@ -90,3 +90,31 @@ Types tha implement `Copy`:
 - Tuples, if they only contain types that also implement Copy. For example, (i32, i32) implements Copy, but (i32, String) does not.
 
 **Ownership and Functions**
+Passing values to a function remains very similar to the concepts explored earlier, so we have:
+
+```rust
+fn main() {
+  let s = String::from("hello"); // s in scope
+
+  takes_ownership(s); // s in owned by the function now
+  // can no longer use s outside
+
+  let x = 5; // x in scope
+
+  makes_copy(x); // this we can do because it makes a copy
+}
+
+
+
+
+fn takes_owenership(some_str: String) { // some_str into scope
+  println!("{}", some_str);
+} // drop is called
+// memory reclaimed
+
+fn makes_copy(some_integer: i32) { // some_integer comes into scope
+  println!("{}", some_integer);
+} // goes out of scope, nothing special happens
+```
+
+**Return values and scope**
