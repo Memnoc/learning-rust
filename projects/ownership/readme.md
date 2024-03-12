@@ -8,7 +8,7 @@ Both are parts of memory available to use at runtime. The problems _ownership_ a
 - _Stack_: **all data stored on the stack must have a fixed size**
 
   - _last in, first out_ stores values in the order it gets them and removes them in the opposite order. So basically the stack removes values from the top of the stack and so on.
-  - Adding data is _pushing onto the stack_ to the stack and removing data is _poppig off the stack_.
+  - Adding data is _pushing onto the stack_ to the stack and removing data is _popping off the stack_.
   - Pushing to the stack is faster than allocating to the heap (allocator does not have to search for a place to store memory, it's always at the top of the stack)
   - Modern processors are faster if they jump around less.
   - When the code calls a function, the values passed into the function (including any pointers to data on the heap) and the function's local variables are pushed onto the stack.
@@ -58,6 +58,8 @@ When we do `String::from` we are asking for the memory. In Rust, we do not have 
 ```
 
 There is a natural point in which we can return the memory, and Rust makes use of that under the hood calling a `drop` function automatically at the closing curly bracket.
+
+**When a variable that includes data on the heaps goes out of scope, the value will be cleaned up by `drop` unless ownership of the data has been moved to another variable**
 
 This practically means that Rust invalidates variables that are out of scope, keeping effectively the memory free. It does so by copying the old data from the stack to a new stack, pointing to the same pointer in the heap. So the heap data in this case **is not copied.**
 This seems similar to the concept of _shallow copy_ of other programming language. This also means that **Rust will never automatically create "deep" copies of the data. Any _automatic_ copying is inexpensive in terms of runtime performance.**
@@ -118,3 +120,33 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope
 ```
 
 **Return values and scope**
+Returning values can also transfer ownership.
+
+```rust
+fn main() {
+  let s1 = gives_ownership(); // moves its return value to s1
+
+  let s2 = String::from("hello"); // in scope now
+
+  let s3 = takes_and_gives_back(s2); // s2 moves into this function, nothing special
+                                     // the function moves its return value to s3
+} // s3 goes out of scope here and it's dropped
+  // s2 was moved so nothing happens
+  // s1 is out of scope and it's dropped
+
+fn gives_ownership() -> String { // moving return value into the function
+
+
+  let some_string = String::from("yours"); // this comes into scope
+
+  some_string // this is now returned and moves as returning value to the function
+}
+
+// Takes a string and returns one
+fn takes_and_gives_back(a_string: String) -> String { // a_string comes into scope
+  // scope
+ a_string // a_string is returned and moves out to the calling function
+}
+```
+
+There is also **a way to let a function use a variable without taking ownership** - this feature is called **references**
